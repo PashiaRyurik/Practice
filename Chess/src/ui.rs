@@ -16,34 +16,30 @@ const CHESS_BOARD_HEIGHT: i32 = 577; // 棋盘实际高度
 pub fn ui(mut game: Board) -> anyhow::Result<()> {
     let app = app::App::default();
     let pand = 1;
-    // 1. 顶层窗口宽度改为 CHESS_BOARD_WIDTH（删除 +120）
     let mut top_window = Window::new(
         100,
         100,
-        CHESS_BOARD_WIDTH, // 关键修改：仅匹配棋盘宽度
+        CHESS_BOARD_WIDTH, 
         CHESS_BOARD_HEIGHT + pand * 2,
         "中国象棋",
     );
-    // 2. 棋盘窗口宽度改为 CHESS_BOARD_WIDTH（删除 +120）
     let mut chess_window = Window::default()
         .with_pos(pand, pand)
-        .with_size(CHESS_BOARD_WIDTH, CHESS_BOARD_HEIGHT); // 关键修改：仅匹配棋盘宽度
+        .with_size(CHESS_BOARD_WIDTH, CHESS_BOARD_HEIGHT); 
 
     {
-        // 画棋盘（原逻辑不变）
         let data = include_bytes!("../resources/board.jpg");
         let mut background = SharedImage::from_image(&JpegImage::from_data(data)?)?;
         Frame::new(0, 0, CHESS_BOARD_WIDTH, CHESS_BOARD_HEIGHT, "")
             .draw(move |f| background.draw(f.x(), f.y(), f.width(), f.height()));
     }
 
-    // 3. flex 布局仅保留棋盘组（删除 vpack 和空白组）
     let mut flex = Flex::default_fill();
     let mut group = Group::default_fill();
-    flex.add(&group); // 仅添加棋盘组，无需固定宽度（fill 模式自动占满）
-    flex.end(); // 直接结束 flex 布局，删除后续冗余代码
+    flex.add(&group); 
+    flex.end(); 
 
-    // 绘制棋子（原逻辑不变）
+    // 绘制棋子
     fn redrawn(group: &mut Group, game: &Board) {
         for x in 0..BOARD_WIDTH as usize {
             for y in 0..BOARD_HEIGHT as usize {
@@ -81,8 +77,7 @@ pub fn ui(mut game: Board) -> anyhow::Result<()> {
     }
 
     redrawn(&mut group, &game);
-
-    // 鼠标点击逻辑（原逻辑不变）
+    // 鼠标点击逻辑
     chess_window.handle(move |w, event| {
         if let Event::Push = event {
             let (click_x, click_y) = app::event_coords();
@@ -98,15 +93,15 @@ pub fn ui(mut game: Board) -> anyhow::Result<()> {
         false
     });
 
-    // 窗口结束逻辑（原逻辑不变）
-    chess_window.end(); // 补充 chess_window 的 end()（原代码遗漏，避免布局异常）
+    // 窗口结束逻辑
+    chess_window.end(); 
     top_window.end();
     top_window.show();
     app.run().unwrap();
     Ok(())
 }
 
-// BoardExt  trait 及其实现（原逻辑不变）
+// BoardExt  trait 及其实现
 trait BoardExt {
     fn click(&mut self, pos: (i32, i32));
     fn select(&mut self, pos: (i32, i32)) -> bool;
