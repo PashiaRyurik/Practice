@@ -1,0 +1,14 @@
+[package]
+name = "engine"
+edition = "2024"
+version = "0.1.0"
+
+[lib]
+name = "engine"
+[[bin]]
+name = "engine"
+path = "src/bin/main.rs"
+
+[dependencies]
+regex = "1.11.1"
+fastrand = "2.3.0"
